@@ -215,7 +215,13 @@ async def assert_config_has_required_llm_api_keys(config: AppConfig) -> None:
 
 
 def _safe_split(s: Union[str, None], sep: str = ",") -> list[str]:
-    """Split a string by a separator. Return an empty list if the string is None."""
-    if s is None:
+    """Split a string by ``sep`` and drop empty elements.
+
+    ``None`` or an empty string will yield an empty list. Whitespace around
+    elements is stripped.
+    """
+
+    if not s:
         return []
-    return s.split(sep)
+
+    return [part.strip() for part in s.split(sep) if part.strip()]
